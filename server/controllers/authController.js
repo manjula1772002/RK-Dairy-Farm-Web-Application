@@ -47,7 +47,7 @@ export async function loggedInUser(req, res) {
       },
     );
 
-    const isProd = process.env.NODE_PORT === "production";
+    const isProd = process.env.NODE_ENV  === "production";
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -116,7 +116,7 @@ export async function getCurrentUser(req, res) {
 }
 
 export const logoutUser = (req, res) => {
-  const isProd = process.env.NODE_PORT === "production";
+  const isProd = process.env.NODE_ENV  === "production";
   res.clearCookie("token", {
     httpOnly: true,
     sameSite: isProd ? "None" : "Lax",
