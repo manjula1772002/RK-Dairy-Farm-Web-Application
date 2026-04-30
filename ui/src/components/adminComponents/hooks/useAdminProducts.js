@@ -32,8 +32,8 @@ export function useAdminProducts() {
 
   const deleteProduct = async (id) => {
 
-    // const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-    const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL;
+    const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
+    // const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL;
     await fetch(`${proxyUrl}/admin/products/${id}`, {
       method: "DELETE",
       credentials: "include",
