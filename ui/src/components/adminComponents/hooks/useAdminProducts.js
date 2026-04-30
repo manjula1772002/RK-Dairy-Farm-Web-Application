@@ -10,7 +10,8 @@ export function useAdminProducts() {
   const loadProducts = async () => {
     try {
       setProductsLoading(true);
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
+      // const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
+      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL;
       const res = await fetch(`${proxyUrl}/admin/products`,
         {
           credentials: "include",
@@ -31,7 +32,8 @@ export function useAdminProducts() {
 
   const deleteProduct = async (id) => {
 
-    const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
+    // const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
+    const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL;
     await fetch(`${proxyUrl}/admin/products/${id}`, {
       method: "DELETE",
       credentials: "include",

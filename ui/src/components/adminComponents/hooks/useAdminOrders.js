@@ -9,7 +9,8 @@ export function useAdminOrders() {
   const loadOrders = async () => {
     try {
       setLoading(true);
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
+      // const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
+      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL;
       const res = await fetch(`${proxyUrl}/orders/admin/all`,
         {
           credentials: "include",

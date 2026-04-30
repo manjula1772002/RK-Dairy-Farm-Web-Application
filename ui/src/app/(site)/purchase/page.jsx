@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import PurchaseForm from "@/app/(site)/purchase/PurchaseForm";
+import PurchaseForm from "./PurchaseForm";
 
 export default function CartPurchasePage() {
   return (
