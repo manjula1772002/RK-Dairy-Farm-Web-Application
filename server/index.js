@@ -8,6 +8,11 @@ import fs from "fs";
 import path from "path";
 import rateLimit from "express-rate-limit";
 
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const PORT = process.env.PORT || 5000;
 const FRONTEND_PROXY=process.env.PROXY||"http://localhost:3000";
 
@@ -19,12 +24,19 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.use("/uploads", express.static(path.join(import.meta.dirname, "uploads")));
-
-const uploadsDir = path.join(import.meta.dirname, "uploads");
+const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
+app.use("/uploads", express.static(uploadsDir));
+
+
+// app.use("/uploads", express.static(path.join(import.meta.dirname, "uploads")));
+
+// const uploadsDir = path.join(import.meta.dirname, "uploads");
+// if (!fs.existsSync(uploadsDir)) {
+//   fs.mkdirSync(uploadsDir);
+// }
 // rate limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
