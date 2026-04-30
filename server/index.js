@@ -9,10 +9,12 @@ import path from "path";
 import rateLimit from "express-rate-limit";
 
 const PORT = process.env.PORT || 5000;
+const FRONTEND_PROXY=process.env.PROXY||"http://localhost:3000";
+
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: `${FRONTEND_PROXY}`,
   credentials: true
 }));
 app.use(express.json());
