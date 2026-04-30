@@ -10,7 +10,7 @@ export function useAdminMessages() {
   useEffect(() => {
     async function fetchMessages() {
       try {
-        const proxyUrl = process.env.NEXT_PROXY_URL || "http://localhost:5000";
+        const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL|| "http://localhost:5000";
         const res = await fetch(`${proxyUrl}/messages`);
         if (!res.ok) throw new Error("Failed to fetch messages");
         const data = await res.json();

@@ -40,7 +40,7 @@ export default function AuthProvider({ children }) {
 
   const refreshSession = useCallback(async () => {
     try {
-      const proxyUrl = process.env.NEXT_PROXY_URL || "http://localhost:5000";
+      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
       const response = await fetch(`${proxyUrl}/me`,
         {
           method: "GET",
@@ -84,7 +84,7 @@ export default function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      const proxyUrl = process.env.NEXT_PROXY_URL || "http://localhost:5000";
+      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
 
       await fetch(`${proxyUrl}/logout`, {
         method: "POST",

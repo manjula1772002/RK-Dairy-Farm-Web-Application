@@ -37,7 +37,7 @@ export default function ContactPage() {
     }
 
     try {
-      const proxyUrl = process.env.NEXT_PROXY_URL || "http://localhost:5000";
+      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
 
       const res = await fetch(`${proxyUrl}/messages`, {
         method: "POST",
