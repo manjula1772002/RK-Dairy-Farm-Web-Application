@@ -9,6 +9,12 @@
 Users can browse products and securely purchase them after logging in.
 
 ---
+# Screentshot ![alt text](image.png)
+# Deployment
+## Backend -https://rk-dairy-farm-web-application.onrender.com
+## Frontend -https://rk-dairy-farm-web-application.vercel.app
+------
+
 
 ## 🎯 Problem Statement
 - Difficulty in finding **fresh and chemical-free dairy products**
@@ -138,8 +144,6 @@ RK Dairy Farm Web Application is a beginner-friendly project that solves a real-
  - ### [Presentation WireFr̥ame](<public/Dairy Farm Wireframe.pdf>)
 
 -------
-## Deployment
-# Backend (https://dairy-farm-web-application.onrender.com/)
 
 ## 👨‍🏫 Mentor
 
