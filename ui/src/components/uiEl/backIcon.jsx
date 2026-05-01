@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function GoBackIcon({ href, ...rest }) {
+export default function BackIcon({ href, ...rest }) {
   return (
     <Link href={href} {...rest}>
       <svg

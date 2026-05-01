@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { useAuth } from "@/context/AuthContext";
 import { apiUrl } from "@/lib/api";
-import backIcon from "@/components/uiEl/backIcon";
+import BackIcon from "@/components/uiEl/backIcon";
 import InputEl from "@/components/uiEl/Forms/InputEl";
 import LabelEl from "@/components/uiEl/Forms/LabelEl";
 import FormErrorEl from "@/components/uiEl/Forms/FormErrorEl";
@@ -171,7 +171,7 @@ export default function NewInventoryPage() {
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-        <backIcon href="/admin/inventory" className="mb-5 inline-block text-gray-600 hover:text-gray-900" />
+        <BackIcon href="/admin/inventory" className="mb-5 inline-block text-gray-600 hover:text-gray-900" />
         <h1 className="text-3xl font-bold text-gray-900">
           Add New Product
         </h1>
