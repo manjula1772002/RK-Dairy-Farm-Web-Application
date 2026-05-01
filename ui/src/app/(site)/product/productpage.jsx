@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { apiUrl } from "@/lib/api";
 
 // Helper: pick lowest price option
 function getDefaultOption(product) {
@@ -27,8 +28,7 @@ export default function ProductPage() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-        const res = await fetch(`${proxyUrl}/products`);
+        const res = await fetch(apiUrl("/products"));
         const data = await res.json();
 
         const productList = Array.isArray(data)
@@ -58,6 +58,8 @@ export default function ProductPage() {
       total += item.quantity;
     });
 
+    // Cart is browser-only local state, loaded once after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCartCount(counts);
     setTotalItems(total);
   }, []);

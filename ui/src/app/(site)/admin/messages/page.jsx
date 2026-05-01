@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiUrl } from "@/lib/api";
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState([]);
@@ -11,10 +12,9 @@ export default function AdminMessagesPage() {
   useEffect(() => {
     async function fetchMessages() {
       try {
-        const proxyUrl =
-          process.env.NEXT_PUBLIC_PROXY_URL||"http://localhost:5000";
-
-        const res = await fetch(`${proxyUrl}/messages`); 
+        const res = await fetch(apiUrl("/messages"), {
+          credentials: "include",
+        });
         if (!res.ok) throw new Error("Failed to fetch messages");
 
         const data = await res.json();

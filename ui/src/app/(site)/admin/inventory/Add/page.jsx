@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { useAuth } from "@/context/AuthContext";
+import { apiUrl } from "@/lib/api";
 
 import InputEl from "@/components/uiEl/Forms/InputEl";
 import LabelEl from "@/components/uiEl/Forms/LabelEl";
@@ -135,9 +136,8 @@ export default function NewInventoryPage() {
         )
       );
 
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL|| "http://localhost:5000";
       const response = await fetch(
-        `${proxyUrl}/admin/products`,
+        apiUrl("/admin/products"),
         {
           method: "POST",
           body: formData,

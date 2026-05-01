@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { apiUrl } from "@/lib/api";
 
 export function useAdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -9,9 +10,7 @@ export function useAdminOrders() {
   const loadOrders = async () => {
     try {
       setLoading(true);
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-      // const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL;
-      const res = await fetch(`${proxyUrl}/orders/admin/all`,
+      const res = await fetch(apiUrl("/orders/admin/all"),
         {
           credentials: "include",
         });
@@ -32,8 +31,7 @@ export function useAdminOrders() {
 
   const updateStatus = async (orderId, orderStatus) => {
     try {
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-      const res = await fetch(`${proxyUrl}/orders/admin/${orderId}/status`, {
+      const res = await fetch(apiUrl(`/orders/admin/${orderId}/status`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

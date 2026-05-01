@@ -8,6 +8,7 @@ import FormErrorEl from "@/components/uiEl/Forms/FormErrorEl";
 import InputEl from "@/components/uiEl/Forms/InputEl";
 import LabelEl from "@/components/uiEl/Forms/LabelEl";
 import TextAreaEl from "@/components/uiEl/Forms/TextareaEl";
+import { apiUrl } from "@/lib/api";
 
 const addressSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -71,8 +72,7 @@ export default function PurchaseForm({ productId }) {
 
     async function loadProduct() {
       try {
-        const proxyUrl = process.env.NEXT_PROXY_URL || "http://localhost:5000";
-        const response = await fetch(`${proxyUrl}/products`);
+        const response = await fetch(apiUrl("/products"));
         const data = await response.json();
         const products = Array.isArray(data)
           ? data
@@ -158,8 +158,7 @@ export default function PurchaseForm({ productId }) {
           address: validation.data,
         };
 
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL|| "http://localhost:5000";
-      const response = await fetch(`${proxyUrl}/orders`, {
+      const response = await fetch(apiUrl("/orders"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

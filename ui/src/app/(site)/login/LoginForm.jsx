@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { apiUrl } from "@/lib/api";
 
 const schema = z.object({
   email: z.email("Invalid email address"),
@@ -31,9 +32,7 @@ export default function LoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL|| "http://localhost:5000";
-
-      const response = await fetch(`${proxyUrl}/login`,
+      const response = await fetch(apiUrl("/login"),
         {
           method: "POST",
           headers: {

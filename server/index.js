@@ -13,14 +13,27 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = process.env.NODE_ENV|| 5000;
-const FRONTEND_PROXY=process.env.NODE_PROXY||"http://localhost:3000";
+const PORT = process.env.PORT || 5000;
+const allowedOrigins = (
+  process.env.NODE_PROXY ||
+  "http://localhost:3000"
+)
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 const app = express();
 
 app.use(cors({
-  origin: `${FRONTEND_PROXY}`,
-  credentials: true
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
 }));
 app.use(express.json());
 

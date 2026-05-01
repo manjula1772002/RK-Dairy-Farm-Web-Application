@@ -5,6 +5,7 @@ import { z } from "zod";
 import InputEl from "@/components/uiEl/Forms/InputEl";
 import LabelEl from "@/components/uiEl/Forms/LabelEl";
 import TextAreaEl from "@/components/uiEl/Forms/TextareaEl";
+import { apiUrl } from "@/lib/api";
 
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -37,9 +38,7 @@ export default function ContactPage() {
     }
 
     try {
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-
-      const res = await fetch(`${proxyUrl}/messages`, {
+      const res = await fetch(apiUrl("/messages"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

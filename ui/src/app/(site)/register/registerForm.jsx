@@ -6,6 +6,7 @@ import LabelEl from "@/components/uiEl/Forms/LabelEl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { apiUrl } from "@/lib/api";
 
 const schema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -31,8 +32,7 @@ export default function RegisterForm() {
   async function submitRegister(formData) {
     // send it to my /server/register end point using fetch
     try {
-       const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-      const response = await fetch(`${proxyUrl}/register`, 
+      const response = await fetch(apiUrl("/register"), 
        {
         method: "POST",
         headers: {

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { AuthContext } from "./AuthContext";
 import { useCallback, useEffect, useState } from "react";
+import { apiUrl } from "@/lib/api";
 
 export default function AuthProvider({ children }) {
   const router = useRouter();
@@ -40,8 +41,7 @@ export default function AuthProvider({ children }) {
 
   const refreshSession = useCallback(async () => {
     try {
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-      const response = await fetch(`${proxyUrl}/me`,
+      const response = await fetch(apiUrl("/me"),
         {
           method: "GET",
           credentials: "include",
@@ -84,9 +84,7 @@ export default function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      const proxyUrl = process.env.NEXT_PUBLIC_PROXY_URL || "http://localhost:5000";
-
-      await fetch(`${proxyUrl}/logout`, {
+      await fetch(apiUrl("/logout"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
