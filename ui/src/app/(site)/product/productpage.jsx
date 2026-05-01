@@ -5,13 +5,17 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { apiUrl } from "@/lib/api";
 
-// Helper: pick lowest price option
+
 function getDefaultOption(product) {
   if (!product.options || product.options.length === 0) return null;
   return product.options.reduce(
     (min, opt) => (opt.price < min.price ? opt : min),
     product.options[0]
   );
+}
+
+function getCartKey(productId, label) {
+  return `${productId}-${label}`;
 }
 
 export default function ProductPage() {
@@ -23,6 +27,7 @@ export default function ProductPage() {
   const [sort, setSort] = useState("");
   const [cartCount, setCartCount] = useState({});
   const [totalItems, setTotalItems] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState({});
 
   // Load products
   useEffect(() => {
@@ -54,11 +59,12 @@ export default function ProductPage() {
     let total = 0;
 
     cart.forEach((item) => {
-      counts[item._id] = (counts[item._id] || 0) + item.quantity;
+      const key = getCartKey(item._id, item.label);
+      counts[key] = (counts[key] || 0) + item.quantity;
       total += item.quantity;
     });
 
-    // Cart is browser-only local state, loaded once after mount.
+    // Cart lives in browser storage, so it is synced once after mount.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCartCount(counts);
     setTotalItems(total);
@@ -93,7 +99,7 @@ export default function ProductPage() {
 
     setCartCount((prev) => ({
       ...prev,
-      [item._id]: updatedQuantity,
+      [getCartKey(item._id, option.label)]: updatedQuantity,
     }));
 
     setTotalItems((prev) => prev + 1);
@@ -122,7 +128,7 @@ export default function ProductPage() {
 
     setCartCount((prev) => ({
       ...prev,
-      [item._id]: updatedItem ? updatedItem.quantity : 0,
+      [getCartKey(item._id, option.label)]: updatedItem ? updatedItem.quantity : 0,
     }));
 
     setTotalItems((prev) => Math.max(prev - 1, 0));
@@ -131,9 +137,10 @@ export default function ProductPage() {
   const handleBuyNow = (item, option) => {
     if (loading) return;
 
+    const selectedQuantity = cartCount[getCartKey(item._id, option.label)] || 1;
     const purchaseUrl = `/purchase/${item._id}?optionLabel=${encodeURIComponent(
       option.label
-    )}&quantity=1`;
+    )}&quantity=${selectedQuantity}`;
 
     if (!user) {
       localStorage.setItem("redirectAfterLogin", purchaseUrl);
@@ -197,13 +204,20 @@ export default function ProductPage() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts.map((item, index) => {
-          const option = getDefaultOption(item);
+        {filteredProducts.map((item) => {
+          const defaultOption = getDefaultOption(item);
+          const option =
+            item.options?.find(
+              (productOption) =>
+                productOption.label === selectedOptions[item._id]
+            ) || defaultOption;
           if (!option) return null;
+
+          const selectedCartCount = cartCount[getCartKey(item._id, option.label)] || 0;
 
           return (
             <div
-              key={index}
+              key={item._id}
               className="group bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition"
             >
               <div className="bg-gray-50 rounded-xl p-3 mb-3">
@@ -216,17 +230,37 @@ export default function ProductPage() {
 
               <h2 className="font-semibold text-gray-800">{item.name}</h2>
 
-              <div className="mt-3">
-                <span className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 border border-gray-200">
-                  {option.label}
-                </span>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {item.options.map((productOption) => {
+                  const isSelected = productOption.label === option.label;
+
+                  return (
+                    <button
+                      key={productOption.label}
+                      type="button"
+                      onClick={() =>
+                        setSelectedOptions((current) => ({
+                          ...current,
+                          [item._id]: productOption.label,
+                        }))
+                      }
+                      className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition ${
+                        isSelected
+                          ? "border-green-700 bg-green-50 text-green-800"
+                          : "border-gray-200 bg-white text-gray-700 hover:border-green-300"
+                      }`}
+                    >
+                      <span className="block">{productOption.label}</span>
+                    </button>
+                  );
+                })}
               </div>
 
               <p className="text-green-600 font-bold mt-3 text-lg">
                 ₹{option.price}
               </p>
 
-              {cartCount[item._id] > 0 ? (
+              {selectedCartCount > 0 ? (
                 <div className="flex items-center justify-between mt-3 border rounded-lg overflow-hidden">
                   <button
                     onClick={() => decreaseCount(item, option)}
@@ -236,7 +270,7 @@ export default function ProductPage() {
                   </button>
 
                   <div className="w-1/3 text-center font-semibold">
-                    {cartCount[item._id]}
+                    {selectedCartCount}
                   </div>
 
                   <button
